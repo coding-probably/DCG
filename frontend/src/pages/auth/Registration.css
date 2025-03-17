@@ -1,0 +1,239 @@
+
+
+.auth-container {
+    width: 400px;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.auth-card {
+    background-color: var(--dark);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.auth-header {
+    padding: 30px 20px;
+    text-align: center;
+    background: linear-gradient(to right, rgba(121, 40, 202, 0.9), rgba(0, 212, 255, 0.9));
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.auth-header h2 {
+    font-size: 1.8rem;
+    margin-top: 10px;
+    color: var(--light);
+}
+
+.auth-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--light);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--darker);
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    color: var(--light);
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-column {
+    flex: 1;
+}
+
+.terms-privacy {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.terms-privacy a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+.terms-privacy a:hover {
+    text-decoration: underline;
+    color: var(--primary);
+}
+
+.btn {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, var(--primary-dark), var(--secondary));
+}
+
+.auth-footer {
+    text-align: center;
+    padding: 20px 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.auth-footer a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.social-register {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.social-register p {
+    position: relative;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: var(--gray-light);
+}
+
+.social-register p::before,
+.social-register p::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.social-register p::before {
+    left: 0;
+}
+
+.social-register p::after {
+    right: 0;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gray);
+    color: var(--light);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.social-btn:hover {
+    background-color: var(--gray-light);
+}
+
+.password-strength {
+    margin-top: 5px;
+    height: 5px;
+    background-color: var(--gray);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.password-strength-meter {
+    height: 100%;
+    width: 0;
+    border-radius: 5px;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.password-strength-text {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color: var(--gray-light);
+}
+
+.error-message {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+@media (max-width: 580px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .auth-container {
+        padding: 10px;
+    }
+    
+    .auth-header {
+        padding: 20px;
+    }
+    
+    .auth-body {
+        padding: 20px;
+    }
+}

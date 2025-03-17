@@ -1,68 +1,62 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --bg-primary: #0f0f13;
+  --bg-secondary: #16161e;
+  --bg-tertiary: #1c1c26;
+  --text-primary: #e4e4e8;
+  --text-secondary: #9999a8;
+  --accent-primary: #00d0c0;
+  --accent-secondary: #7c5cff;
+  --accent-tertiary: #ff5cad;
+  --normal-color: #00d0c0;
+  --warning-color: #ffcc00;
+  --critical-color: #ff5c5c;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --grad-bg: linear-gradient(135deg, #1c1c26, #16161e);
+  --grad-accent: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /*----- from login.html ------*/
+  --primary: #7928CA;
+  --primary-dark: #6923B0;
+  --secondary: #00D4FF;
+  --dark: #111418;
+  --darker: #0b0e12;
+  --light: #f8f9fa;
+  --gray: #343a40;
+  --gray-light: #495057;
+  --success: #4CD464;
+  --warning: #FFC107;
+  --danger: #FF3860;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+  /*---- registraion -----*/
+  --primary: #7928CA;
+    --primary-dark: #6923B0;
+    --secondary: #00D4FF;
+    --dark: #111418;
+    --darker: #0b0e12;
+    --light: #f8f9fa;
+    --gray: #343a40;
+    --gray-light: #495057;
+    --success: #4CD464;
+    --warning: #FFC107;
+    --danger: #FF3860;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  background-color: var(--darker);
+  color: var(--light);
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
