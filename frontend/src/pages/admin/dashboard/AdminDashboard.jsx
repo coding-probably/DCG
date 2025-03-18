@@ -1,7 +1,109 @@
 import { NavLink } from 'react-router-dom';
 import './AdminDashboard.css';
+import WasteComposition from '../../graphs/WasteComposition';
+import WasteCollectionTrends from '../../graphs/WasteCollectionTrends';
+import MapComponent from '../../MapComponent';
+import React, {useState, useEffect} from 'react';
 
 const AdminDashboard = () => {
+
+    //==============
+    const [fetchedComplaints, setComplaints] = useState([
+        {binId: "BIN-001",
+            complaintId :  "COMP-2025-03-15-4996",
+
+           
+            complaintType: "overflow",
+     
+            
+            contactInfo: "testcomplaint@gmail.com",
+          
+            createdAt: "2025-03-15T18:58:23.897Z",
+       
+            
+            description: "this is to inform that this issue is not resolved after notifiying many times",
+      
+            
+            location: "new delhi",
+    
+            
+            priority:  "high",
+            
+           
+            status: "Resolved",
+        
+            
+            updatedAt :"2025-03-15T21:27:48.101Z",
+  
+            
+    
+            _id : "67d5cdcf0a4ac51df907e1db"}
+    ]);  // State to hold fetched complaints
+  const [loading, setLoading] = useState(true);      // State for loading indicator
+  const [error, setError] = useState(null);          // State for error handling
+
+
+
+  const [pendingNo, setPendingNo] = useState(12);
+    const [resolvedNo, setResolvedNo] = useState(42);
+    const [inProgress, setInProgress] = useState(6);
+    const [totalComplaint, setTotalComplaint] = useState(18);
+
+
+
+
+
+
+  // Fetch complaints when the component mounts
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        setLoading(true);  // Set loading state to true before the API call
+
+        // Make API call to fetch complaints
+        const response = await axios.get('http://localhost:5000/api/complaints/');
+
+        if (response.status === 200) {
+            console.log(response.data);
+          setComplaints(response.data.data);  // Set the complaints in state
+          setTotalComplaint(response.data.count);
+        } else {
+          setError('Failed to fetch complaints'); // Handle the case when status is not 200
+        }
+      } catch (err) {
+        setError('Error fetching complaints: ' + err.message); // Handle any error that occurs
+      } finally {
+        setLoading(false);  // Set loading to false after the API call is finished
+      }
+    };
+
+    fetchComplaints();  // Call the function to fetch complaints
+  }, []);  // Em
+
+
+
+  //---------> run function and count the status 
+
+
+  function formatDateAndTime(timestamp) {
+    const date = new Date(timestamp);
+  
+    // Format date (e.g., Mar 8, 2025)
+    const formattedDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  
+    // Format time (e.g., 9:27 PM)
+    const formattedTime = date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+  
+    return `${formattedDate} ${formattedTime}`;
+  }
 
 
 
@@ -13,6 +115,7 @@ const AdminDashboard = () => {
 
                 
                 <div className="sidebar">
+                    <NavLink to='/'>
                     <div className="sidebar-logo">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <defs>
@@ -28,6 +131,7 @@ const AdminDashboard = () => {
                         </svg>
                         <h2>SmartWaste</h2>
                     </div>
+                    </NavLink>
 
                     <ul className="sidebar-menu">
                         <li>
@@ -68,58 +172,7 @@ const AdminDashboard = () => {
                             <input type="text" placeholder="Search bins, routes, or areas..." />
                         </div>
                         <div className="user-profile">
-                            <div className="notification-icon">
-                                <i className="fas fa-bell" style={{ color: "var(--gray-light)" }}></i>
-                                <div className="notification-badge">3</div>
-
-
-                                <div className="notification-dropdown">
-                                    <div className="notification-header">
-                                        <h3>Notifications</h3>
-                                        <a href="#">Mark all as read</a>
-                                    </div>
-                                    <div className="notification-list">
-                                        <div className="notification-item">
-                                            <div className="notification-icon-container">
-                                                <i className="fas fa-trash-alt" style={{ color: "var(--danger)" }}></i>
-                                            </div>
-                                            <div className="notification-content">
-                                                <h4>Bin Capacity Alert</h4>
-                                                <p>Bin ID #1045 in Sector 7 has reached 90% capacity.</p>
-                                                <span className="notification-time">10 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <div className="notification-item">
-                                            <div className="notification-icon-container">
-                                                <i className="fas fa-exclamation-triangle" style={{ color: "var(--warning)" }}></i>
-                                            </div>
-                                            <div className="notification-content">
-                                                <h4>Odor Detection</h4>
-                                                <p>Abnormal odor levels detected in Bin ID #872 in Downtown area.</p>
-                                                <span className="notification-time">35 minutes ago</span>
-                                            </div>
-                                        </div>
-                                        <div className="notification-item">
-                                            <div className="notification-icon-container">
-                                                <i className="fas fa-comment-alt" style={{ color: "var(--primary)" }}></i>
-                                            </div>
-                                            <div className="notification-content">
-                                                <h4>New Complaint Filed</h4>
-                                                <p>A resident has reported an overflowing bin in Westside Park.</p>
-                                                <span className="notification-time">2 hours ago</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="notification-actions">
-                                        <button>View All Notifications</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/api/placeholder/40/40" alt="Admin User" />
-                            <div className="user-info">
-                                <h4>Admin User</h4>
-                                <p>System Administrator</p>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -170,29 +223,9 @@ const AdminDashboard = () => {
 
                     <div className="map-section">
                         <div className="map-container">
-                            <div className="map-overlay">
-                                <h3>Waste Bin Distribution</h3>
-                                <div className="filter-options">
-                                    <button className="active">All Bins</button>
-                                    <button>Near Capacity</button>
-                                    <button>Dry Waste</button>
-                                    <button>Wet Waste</button>
-                                    <button>Hazardous</button>
-                                </div>
-                                <div className="legend">
-                                    <div className="legend-item">
-                                        <div className="legend-color" style={{ backgroundColor: "var(--success)" }}></div>
-                                        <span>Available</span>
-                                    </div>
-                                    <div className="legend-item">
-                                        <div className="legend-color" style={{ backgroundColor: "var(--warning)" }}></div>
-                                        <span>Filling Up</span>
-                                    </div>
-                                    <div className="legend-item">
-                                        <div className="legend-color" style={{ backgroundColor: "var(--danger)" }}></div>
-                                        <span>Critical</span>
-                                    </div>
-                                </div>
+                            
+                            <div className='map-img'>
+                                <MapComponent/>
                             </div>
                             <img src="/api/placeholder/800/400" alt="City Map" className="map-img" />
                         </div>
@@ -268,33 +301,20 @@ const AdminDashboard = () => {
 
                     <div className="charts-section">
                         <div className="chart-container">
-                            <div className="chart-header">
+                        <div className="chart-header">
                                 <h3>Waste Collection Trends</h3>
-                                <select>
-                                    <option>Last 7 Days</option>
-                                    <option>Last 30 Days</option>
-                                    <option>Last 3 Months</option>
-                                    <option>Last Year</option>
-                                </select>
                             </div>
                             <div className="chart-placeholder">
 
-                                <img src="/api/placeholder/500/250" alt="Waste Collection Trends Chart" />
+                                <WasteCollectionTrends/>
                             </div>
                         </div>
                         <div className="chart-container">
                             <div className="chart-header">
                                 <h3>Waste Composition</h3>
-                                <select>
-                                    <option>All Sectors</option>
-                                    <option>Residential</option>
-                                    <option>Commercial</option>
-                                    <option>Industrial</option>
-                                </select>
                             </div>
                             <div className="chart-placeholder">
-
-                                <img src="/api/placeholder/500/250" alt="Waste Composition Chart" />
+                                <WasteComposition/>
                             </div>
                         </div>
                     </div>

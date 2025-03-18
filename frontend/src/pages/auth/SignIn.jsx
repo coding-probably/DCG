@@ -1,10 +1,62 @@
 import { NavLink } from 'react-router-dom'
 import './SignIn.css'
-
+import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie
+import React, { useState } from "react";
 
 
 
 const SignIn = () => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSignIn = async (e) => {
+        e.preventDefault();
+        setError(''); // Clear any previous errors
+
+        try {
+            console.log('before ---->');
+            const response = await axios.post('http://localhost:5000/api/auth/login', { 
+                email,
+                password,
+            });
+            console.log('after ---->');
+            // Handle successful sign-in
+            console.log(response.data);
+            const {token, role, name, _id} = response.data;
+            console.log(token);
+            console.log(role);
+            console.log(name);
+            Cookies.set('authToken', token, { expires: 1 }); // Store token in cookie (example: 7 days expiry)
+            localStorage.setItem('user', JSON.stringify({
+                userId: _id,
+                name: name,
+                role: role
+            }));
+            
+            /*
+            const { token, _id, name, email, role } = response.data; // Assuming your API returns token and user data
+            Cookies.set('authToken', token); // Store token in cookie (example: 7 days expiry)
+            localStorage.setItem('user1', JSON.stringify({
+                userId: _id,
+                name: name,
+                email: email,
+                role: role
+            }));*/
+            // Redirect to the desired page (e.g., dashboard)
+            alert("Sign In Successfully .....")
+            window.location.href = '/'; // Replace with your dashboard path
+
+        } catch (err) {
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message); // Display error message from the API
+            } else {
+                setError('An error occurred during sign-in.'); // Generic error message
+            }
+        }
+    };
 
 
 
@@ -26,22 +78,25 @@ const SignIn = () => {
                         <h2>SmartWaste Login</h2>
                     </div>
                     <div class="auth-body">
-                        <form id="loginForm">
+                        <form id="loginForm" onSubmit={handleSignIn}>
                             <div class="form-group">
                                 <label htmlFor="email">Email</label>
-                                <input type="email" id="email" class="form-control" placeholder="Enter your email" />
+                                <input type="email" id="email" class="form-control" placeholder="Enter your email" value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required />
                                 <div class="error-message" id="emailError">Please enter a valid email address</div>
                             </div>
                             <div class="form-group">
                                 <label htmlFor="password">Password</label>
-                                <input type="password" id="password" class="form-control" placeholder="Enter your password" />
+                                <input type="password" id="password" class="form-control" placeholder="Enter your password" value={password}
+                                    onChange={(e) => setPassword(e.target.value)} />
                                 <div class="error-message" id="passwordError">Password is required</div>
                             </div>
                             <div class="remember-forgot">
-                                <div class="remember-me">
-                                    <input type="checkbox" id="remember" />
-                                    <label htmlFor="remember">Remember me</label>
-                                </div>
+                            <div class="remember-me">
+                            <input type="checkbox" id="remember"/>
+                            <label for="remember">Remember me</label>
+                        </div>
                                 <a href="#" class="forgot-password">Forgot Password?</a>
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
@@ -64,7 +119,7 @@ const SignIn = () => {
                     </div>
                     <div class="auth-footer">
                         <NavLink to="/registration">
-                        <p>Don't have an account? <a>Register</a></p>
+                            <p>Don't have an account? <a>Register</a></p>
                         </NavLink>
                     </div>
                 </div>

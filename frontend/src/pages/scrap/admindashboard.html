@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartWaste | IoT Waste Management</title>
+    <style>
+        :root {
+            --primary: #7928CA;
+            --primary-dark: #6923B0;
+            --secondary: #00D4FF;
+            --dark: #111418;
+            --darker: #0b0e12;
+            --light: #f8f9fa;
+            --gray: #343a40;
+            --gray-light: #495057;
+            --success: #4CD464;
+            --warning: #FFC107;
+            --danger: #FF3860;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark);
+            padding: 20px 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-logo h2 {
+            color: var(--light);
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(121, 40, 202, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--dark);
+            border-radius: 25px;
+            padding: 10px 15px;
+            width: 300px;
+        }
+
+        .search-bar input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: var(--light);
+            width: 100%;
+            margin-left: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info h4 {
+            font-size: 0.9rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray-light);
+        }
+
+        .notification-icon {
+            position: relative;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-header h3 {
+            font-size: 1.1rem;
+            color: var(--light);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            font-size: 0.8rem;
+            color: var(--gray-light);
+        }
+
+        .card.success .card-icon {
+            background: linear-gradient(135deg, var(--success), #3AAF50);
+        }
+
+        .card.warning .card-icon {
+            background: linear-gradient(135deg, var(--warning), #FFB300);
+        }
+
+        .card.danger .card-icon {
+            background: linear-gradient(135deg, var(--danger), #FF0039);
+        }
+
+        /* Map Section */
+        .map-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .map-container {
+            background-color: var(--dark);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(11, 14, 18, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        .map-overlay h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .filter-options button {
+            background-color: var(--gray);
+            border: none;
+            padding: 5px 10px;
+            color: var(--light);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .filter-options button.active {
+            background-color: var(--primary);
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .map-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        /* Bin Status List */
+        .bin-status {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .bin-status h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .bin-list {
+            overflow-y: auto;
+            max-height: 350px;
+        }
+
+        .bin-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bin-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .bin-info p {
+            font-size: 0.8rem;
+            color: var(--gray-light);
+        }
+
+        .bin-status-indicator {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .full {
+            background-color: var(--danger);
+        }
+
+        .partial {
+            background-color: var(--warning);
+        }
+
+        .available {
+            background-color: var(--success);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .chart-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .chart-header select {
+            background-color: var(--darker);
+            color: var(--light);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chart-placeholder {
+            background-color: rgba(255, 255, 255, 0.05);
+            height: 250px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Recent Complaints */
+        .complaints-section {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .complaints-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .complaints-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .complaints-table th {
+            text-align: left;
+            padding: 15px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-light);
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+
+        .complaints-table td {
+            padding: 15px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .resolved {
+            background-color: rgba(76, 212, 100, 0.1);
+            color: var(--success);
+        }
+
+        .pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+
+        .critical {
+            background-color: rgba(255, 56, 96, 0.1);
+            color: var(--danger);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .charts-section, .map-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 10px 0;
+            }
+            .sidebar-logo {
+                margin-bottom: 10px;
+            }
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .sidebar-menu li {
+                margin-bottom: 0;
+                margin-right: 5px;
+            }
+            .sidebar-menu a {
+                padding: 10px 15px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            .sidebar-menu a:hover, .sidebar-menu a.active {
+                border-left: none;
+                border-bottom: 3px solid var(--primary);
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-bar {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Notification Dropdown */
+        .notification-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 300px;
+            background-color: var(--dark);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: none;
+        }
+
+        .notification-dropdown.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h3 {
+            font-size: 1rem;
+        }
+
+        .notification-header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .notification-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .notification-icon-container {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(121, 40, 202, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .notification-content p {
+            font-size: 0.8rem;
+            color: var(--gray-light);
+            margin-bottom: 5px;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--gray-light);
+        }
+
+        .notification-actions {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .notification-actions button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .notification-actions button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Complaint Form Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--dark);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--gray-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--darker);
+            border: 1px solid var(--gray);
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23495057' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-light);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#7928CA" />
+                            <stop offset="100%" style="stop-color:#00D4FF" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                </svg>
+                <h2>SmartWaste</h2>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-map-marker-alt"></i> Map View</a></li>
+                <li><a href="#"><i class="fas fa-truck"></i> Collection Routes</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#"><i class="fas fa-exclamation-circle"></i> Complaints</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-bar">
+                    <i class="fas fa-search" style="color: var(--gray-light);"></i>
+                    <input type="text" placeholder="Search bins, routes, or areas...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell" style="color: var(--gray-light);"></i>
+                        <div class="notification-badge">3</div>
+                        
+                        <!-- Notification Dropdown -->
+                        <div class="notification-dropdown">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <a href="#">Mark all as read</a>
+                            </div>
+                            <div class="notification-list">
+                                <div class="notification-item">
+                                    <div class="notification-icon-container">
+                                        <i class="fas fa-trash-alt" style="color: var(--danger);"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h4>Bin Capacity Alert</h4>
+                                        <p>Bin ID #1045 in Sector 7 has reached 90% capacity.</p>
+                                        <span class="notification-time">10 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon-container">
+                                        <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h4>Odor Detection</h4>
+                                        <p>Abnormal odor levels detected in Bin ID #872 in Downtown area.</p>
+                                        <span class="notification-time">35 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="notification-item">
+                                    <div class="notification-icon-container">
+                                        <i class="fas fa-comment-alt" style="color: var(--primary);"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h4>New Complaint Filed</h4>
+                                        <p>A resident has reported an overflowing bin in Westside Park.</p>
+                                        <span class="notification-time">2 hours ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="notification-actions">
+                                <button>View All Notifications</button>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="/api/placeholder/40/40" alt="Admin User">
+                    <div class="user-info">
+                        <h4>Admin User</h4>
+                        <p>System Administrator</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Total Bins</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">1,248</div>
+                    <div class="card-subtitle">Active smart bins deployed</div>
+                </div>
+                <div class="card success">
+                    <div class="card-header">
+                        <h3>Waste Collected</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">456 tons</div>
+                    <div class="card-subtitle">This month (+12% from last month)</div>
+                </div>
+                <div class="card warning">
+                    <div class="card-header">
+                        <h3>Bins Near Capacity</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">42</div>
+                    <div class="card-subtitle">Requiring attention within 24h</div>
+                </div>
+                <div class="card danger">
+                    <div class="card-header">
+                        <h3>Active Complaints</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                    <div class="card-value">18</div>
+                    <div class="card-subtitle">5 marked as critical</div>
+                </div>
+            </div>
+
+            <!-- Map and Bin Status -->
+            <div class="map-section">
+                <div class="map-container">
+                    <div class="map-overlay">
+                        <h3>Waste Bin Distribution</h3>
+                        <div class="filter-options">
+                            <button class="active">All Bins</button>
+                            <button>Near Capacity</button>
+                            <button>Dry Waste</button>
+                            <button>Wet Waste</button>
+                            <button>Hazardous</button>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--success);"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--warning);"></div>
+                                <span>Filling Up</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--danger);"></div>
+                                <span>Critical</span>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="/api/placeholder/800/400" alt="City Map" class="map-img">
+                </div>
+                <div class="bin-status">
+                    <h3>Critical Bin Status</h3>
+                    <div class="bin-list">
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #1045</h4>
+                                <p>Sector 7, North Avenue</p>
+                            </div>
+                            <div class="bin-status-indicator">
+                                <div class="status-dot full"></div>
+                                <span>95%</span>
+                            </div>
+                        </div>
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #872</h4>
+                                <p>Downtown, Main Street</p>
+                            </div>
+                            <div class="bin-status-indicator">
+                                <div class="status-dot full"></div>
+                                <span>92%</span>
+                            </div>
+                        </div>
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #1124</h4>
+                                <p>East Park, Entrance B</p>
+                            </div>
+                            <div class="bin-status-indicator">
+                                <div class="status-dot partial"></div>
+                                <span>76%</span>
+                            </div>
+                        </div>
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #938</h4>
+                                <p>Hospital Zone, Block C</p>
+                            </div>
+                            <div
+
+                            <div class="bin-status-indicator">
+                                <div class="status-dot partial"></div>
+                                <span>76%</span>
+                            </div>
+                        </div>
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #938</h4>
+                                <p>Hospital Zone, Block C</p>
+                            </div>
+                            <div class="bin-status-indicator">
+                                <div class="status-dot partial"></div>
+                                <span>82%</span>
+                            </div>
+                        </div>
+                        <div class="bin-item">
+                            <div class="bin-info">
+                                <h4>Bin #756</h4>
+                                <p>Shopping Mall, Level 2</p>
+                            </div>
+                            <div class="bin-status-indicator">
+                                <div class="status-dot partial"></div>
+                                <span>73%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Waste Collection Trends</h3>
+                        <select>
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Last 3 Months</option>
+                            <option>Last Year</option>
+                        </select>
+                    </div>
+                    <div class="chart-placeholder">
+                        <!-- Chart would be rendered here with JavaScript -->
+                        <img src="/api/placeholder/500/250" alt="Waste Collection Trends Chart">
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Waste Composition</h3>
+                        <select>
+                            <option>All Sectors</option>
+                            <option>Residential</option>
+                            <option>Commercial</option>
+                            <option>Industrial</option>
+                        </select>
+                    </div>
+                    <div class="chart-placeholder">
+                        <!-- Chart would be rendered here with JavaScript -->
+                        <img src="/api/placeholder/500/250" alt="Waste Composition Chart">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Complaints -->
+            <div class="complaints-section">
+                <div class="complaints-header">
+                    <h3>Recent Complaints</h3>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                <table class="complaints-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Location</th>
+                            <th>Issue</th>
+                            <th>Reported</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#C1092</td>
+                            <td>Westside Park</td>
+                            <td>Overflowing bin</td>
+                            <td>2 hours ago</td>
+                            <td><span class="status-badge critical">Critical</span></td>
+                        </tr>
+                        <tr>
+                            <td>#C1091</td>
+                            <td>Riverfront Walkway</td>
+                            <td>Broken bin lid</td>
+                            <td>Yesterday</td>
+                            <td><span class="status-badge pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>#C1090</td>
+                            <td>Central Market</td>
+                            <td>Foul odor</td>
+                            <td>3 days ago</td>
+                            <td><span class="status-badge resolved">Resolved</span></td>
+                        </tr>
+                        <tr>
+                            <td>#C1089</td>
+                            <td>North Avenue</td>
+                            <td>Missed collection</td>
+                            <td>4 days ago</td>
+                            <td><span class="status-badge resolved">Resolved</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complaint Form Modal -->
+    <div class="modal" id="complaintModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Report an Issue</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="complaintForm">
+                    <div class="form-group">
+                        <label for="binId">Bin ID</label>
+                        <input type="text" id="binId" class="form-control" placeholder="Enter bin ID or location">
+                    </div>
+                    <div class="form-group">
+                        <label for="issueType">Issue Type</label>
+                        <select id="issueType" class="form-control">
+                            <option value="">Select an issue type</option>
+                            <option value="overflow">Overflowing Bin</option>
+                            <option value="damage">Damaged Bin</option>
+                            <option value="odor">Foul Odor</option>
+                            <option value="missed">Missed Collection</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" class="form-control" placeholder="Provide details about the issue"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location Details</label>
+                        <input type="text" id="location" class="form-control" placeholder="Describe the exact location">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancel</button>
+                <button class="btn btn-primary" id="submitComplaint">Submit Complaint</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Notification Dropdown Toggle
+        document.querySelector('.notification-icon').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.notification-dropdown').classList.toggle('show');
+        });
+
+        // Close dropdown when clicking elsewhere
+        document.addEventListener('click', function() {
+            document.querySelector('.notification-dropdown').classList.remove('show');
+        });
+
+        // Modal functions
+        const modal = document.getElementById('complaintModal');
+        const closeButtons = document.querySelectorAll('.close-btn, .close-modal');
+
+        // Report issue button (to be added where needed)
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportButtons = document.querySelectorAll('.report-issue');
+            reportButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    modal.classList.add('show');
+                });
+            });
+        });
+
+        // Close modal
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modal.classList.remove('show');
+            });
+        });
+
+        // Submit form (would typically include validation and AJAX submission)
+        document.getElementById('submitComplaint').addEventListener('click', function() {
+            // Form validation logic would go here
+            alert('Your complaint has been submitted!');
+            modal.classList.remove('show');
+            // Reset form
+            document.getElementById('complaintForm').reset();
+        });
+
+        // Close modal if clicking outside of content
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

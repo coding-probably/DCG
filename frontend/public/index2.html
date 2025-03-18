@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoScore - Smart Dustbin Gamification</title>
+    <link rel="stylesheet" href="styles3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.29 7 12 12 20.71 7"></polyline>
+                    <line x1="12" y1="22" x2="12" y2="12"></line>
+                </svg>
+                <h1>EcoScore</h1>
+            </div>
+            <div class="header-actions">
+                <button class="redeem-btn" id="redeemBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    Redeem Points
+                </button>
+                <div class="profile-pic" id="profileIcon" data-page="profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav>
+                    <ul>
+                        <li data-page="dashboard" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                            </svg>
+                            Dashboard
+                        </li>
+                        <li data-page="leaderboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                            Leaderboard
+                        </li>
+                        <li data-page="profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Profile
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard">
+                <!-- Dashboard Pages -->
+                <div class="page" id="dashboardPage">
+                    <div class="dashboard-grid">
+                        <!-- Points Card -->
+                        <div class="card points-card">
+                            <h2>Your Points</h2>
+                            <p class="subtitle">Earn points by using smart bins</p>
+                            
+                            <div class="points-display">
+                                <h1 class="points-value">750</h1>
+                                <div class="points-badge">
+                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg> -->
+                                    +25 this week
+                                </div>
+                            </div>
+                            
+                            <p class="next-reward">Next Reward at 1000 points</p>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 75%"></div>
+                            </div>
+                            <p class="progress-text">750/1000</p>
+                        </div>
+
+                        <!-- Weekly Streak Card -->
+                        <div class="card streak-card">
+                            <h2>Weekly Streak</h2>
+                            <p class="subtitle">Keep using smart bins to maintain your streak</p>
+                            
+                            <div class="streak-display">
+                                <h1 class="streak-value">5</h1>
+                                <p>days</p>
+                                <div class="streak-circle">
+                                    <span>5/7</span>
+                                </div>
+                            </div>
+                            
+                            <div class="weekday-tracker">
+                                <div class="day active">M</div>
+                                <div class="day active">T</div>
+                                <div class="day active">W</div>
+                                <div class="day active">T</div>
+                                <div class="day active">F</div>
+                                <div class="day">S</div>
+                                <div class="day">S</div>
+                            </div>
+                        </div>
+
+                        <!-- Impact Stats Card -->
+                        <div class="card impact-card">
+                            <h2>Impact Stats</h2>
+                            <p class="subtitle">Your contribution to the environment</p>
+                            
+                            <div class="impact-stats">
+                                <div class="stat">
+                                    <div class="stat-icon trash">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <h2>24</h2>
+                                    <p>Waste Deposits</p>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-icon recycle">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"></path>
+                                            <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"></path>
+                                            <path d="m14 16-3 3 3 3"></path>
+                                            <path d="M8.293 13.596 7.196 9.5 3.1 10.598"></path>
+                                            <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"></path>
+                                            <path d="m13.378 9.633 4.096 1.098 1.097-4.096"></path>
+                                        </svg>
+                                    </div>
+                                    <h2>18</h2>
+                                    <p>kg Recycled</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity Card -->
+                        <div class="card activity-card">
+                            <h2>Recent Activity</h2>
+                            <p class="subtitle">Your recent smart bin interactions</p>
+                            
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon recycle">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"></path>
+                                            <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"></path>
+                                            <path d="m14 16-3 3 3 3"></path>
+                                            <path d="M8.293 13.596 7.196 9.5 3.1 10.598"></path>
+                                            <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"></path>
+                                            <path d="m13.378 9.633 4.096 1.098 1.097-4.096"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-details">
+                                        <h3>Waste Deposited at Central Park Bin #12</h3>
+                                        <div class="activity-meta">
+                                            <span class="time">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                </svg>
+                                                Today, 10:30 AM
+                                            </span>
+                                            <span class="tag">Recyclable</span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-points">+15</div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon trash">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-details">
+                                        <h3>Waste Deposited at Lodhi Gardens Bin #12</h3>
+                                        <div class="activity-meta">
+                                            <span class="time">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                </svg>
+                                                Yesterday, 3:45 PM
+                                            </span>
+                                            <span class="tag">General</span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-points">+10</div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="activity-icon achievement">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="8" r="7"></circle>
+                                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="activity-details">
+                                        <h3>Achievement Unlocked: 3-Day Streak</h3>
+                                        <div class="activity-meta">
+                                            <span class="time">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                </svg>
+                                                Yesterday, 3:45 PM
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-points">+25</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Performers Card -->
+                        <div class="card performers-card">
+                            <h2>Top Performers</h2>
+                            <p class="subtitle">This week's leaders</p>
+                            
+                            <div class="leaderboard-list">
+                                <div class="leaderboard-item">
+                                    <div class="rank rank-1">1</div>
+                                    <div class="user-avatar">AK</div>
+                                    <div class="user-name">Arjun</div>
+                                    <div class="user-points">1240 pts</div>
+                                </div>
+                                
+                                <div class="leaderboard-item">
+                                    <div class="rank rank-2">2</div>
+                                    <div class="user-avatar">JC</div>
+                                    <div class="user-name">Jaspreet Chauhan</div>
+                                    <div class="user-points">980 pts</div>
+                                </div>
+                                
+                                <div class="leaderboard-item">
+                                    <div class="rank rank-3">3</div>
+                                    <div class="user-avatar">TW</div>
+                                    <div class="user-name">Tanvi Wadhwa</div>
+                                    <div class="user-points">840 pts</div>
+                                </div>
+                            </div>
+                            
+                            <button class="view-all-btn" data-page="leaderboard">View Full Leaderboard</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Page -->
+                <div class="page" id="leaderboardPage" style="display: none;">
+                    <div class="page-header">
+                        <h1>Leaderboard</h1>
+                        <p class="subtitle">Top eco-warriors making a difference</p>
+                    </div>
+
+                    <div class="card full-width">
+                        <div class="leaderboard-tabs">
+                            <button class="tab-btn active" data-period="weekly">This Week</button>
+                            <button class="tab-btn" data-period="monthly">This Month</button>
+                            <button class="tab-btn" data-period="alltime">All Time</button>
+                        </div>
+
+                        <div class="leaderboard-full">
+                            <div class="leaderboard-header">
+                                <div class="rank-header">Rank</div>
+                                <div class="user-header">User</div>
+                                <div class="points-header">Points</div>
+                                <div class="deposits-header">Deposits</div>
+                                <div class="streak-header">Streak</div>
+                            </div>
+
+                            <div class="leaderboard-body">
+                                <!-- Leaderboard entries will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div class="page" id="profilePage" style="display: none;">
+                    <div class="page-header">
+                        <h1>User Profile</h1>
+                        <p class="subtitle">Your personal information and achievements</p>
+                    </div>
+
+                    <div class="profile-grid">
+                        <div class="card profile-info-card">
+                            <div class="profile-header">
+                                <div class="profile-avatar">
+                                    <!-- <img src="/placeholder.svg?height=1000&width=100" alt="Profile"> -->
+                                </div>
+                                <div class="profile-details">
+                                    <h2>User</h2>
+                                    <p class="profile-title">EcoWarrior Level 5</p>
+                                    <div class="level-progress">
+                                        <div class="level-bar">
+                                            <div class="level-fill" style="width: 65%"></div>
+                                        </div>
+                                        <span class="level-text">65% to Level 6</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-stats">
+                                <div class="profile-stat">
+                                    <div class="stat-icon trophy">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="8" r="7"></circle>
+                                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                        </svg>
+                                    </div>
+                                    <h2>750</h2>
+                                    <p>Total Points</p>
+                                </div>
+                                <div class="profile-stat">
+                                    <div class="stat-icon trash">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <h2>24</h2>
+                                    <p>Bin Uses</p>
+                                </div>
+                                <div class="profile-stat">
+                                    <div class="stat-icon badge">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                    </div>
+                                    <h2>5</h2>
+                                    <p>Badges Earned</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card badges-card">
+                            <h2>Badges & Achievements</h2>
+                            <p class="subtitle">Rewards for your eco-friendly actions</p>
+
+                            <div class="badges-grid">
+                                <div class="badge-item earned">
+                                    <div class="badge-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>First Deposit</h3>
+                                    <p>Made your first waste deposit</p>
+                                </div>
+                                <div class="badge-item earned">
+                                    <div class="badge-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="8" r="7"></circle>
+                                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                        </svg>
+                                    </div>
+                                    <h3>Week Streak</h3>
+                                    <p>Used bins for 5 consecutive days</p>
+                                </div>
+                                <div class="badge-item earned">
+                                    <div class="badge-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"></path>
+                                            <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"></path>
+                                            <path d="m14 16-3 3 3 3"></path>
+                                            <path d="M8.293 13.596 7.196 9.5 3.1 10.598"></path>
+                                            <path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"></path>
+                                            <path d="m13.378 9.633 4.096 1.098 1.097-4.096"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>Recycling Pro</h3>
+                                    <p>Recycled over 10kg of waste</p>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>Community Leader</h3>
+                                    <p>Reach top 10 on the leaderboard</p>
+                                </div>
+                                <div class="badge-item locked">
+                                    <div class="badge-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                    </div>
+                                    <h3>Eco Warrior</h3>
+                                    <p>Earn 1000+ points in a month</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Rewards Modal -->
+    <div class="modal" id="rewardsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Redeem Your Points</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="points-available">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                    <span>750 points available</span>
+                </div>
+
+                <div class="rewards-grid">
+                    <div class="reward-card">
+                        <div class="reward-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3"></path>
+                                <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5"></path>
+                                <rect x="6" y="14" width="12" height="4"></rect>
+                            </svg>
+                        </div>
+                        <div class="reward-details">
+                            <h3>$5 Coffee Coupon</h3>
+                            <p>Get a free coffee at any EcoCafe location</p>
+                            <div class="reward-cost">500 points</div>
+                        </div>
+                        <button class="redeem-reward-btn" data-cost="500">Redeem</button>
+                    </div>
+                    
+                    <div class="reward-card">
+                        <div class="reward-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                                <path d="M3 6h18"></path>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                        </div>
+                        <div class="reward-details">
+                            <h3>Eco-Friendly Tote Bag</h3>
+                            <p>Stylish reusable shopping bag made from recycled materials</p>
+                            <div class="reward-cost">750 points</div>
+                        </div>
+                        <button class="redeem-reward-btn" data-cost="750">Redeem</button>
+                    </div>
+                    
+                    <div class="reward-card disabled">
+                        <div class="reward-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                <line x1="2" x2="22" y1="10" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="reward-details">
+                            <h3>$10 Gift Card</h3>
+                            <p>Gift card for any participating eco-friendly store</p>
+                            <div class="reward-cost">1000 points</div>
+                        </div>
+                        <button class="redeem-reward-btn" data-cost="1000" disabled>Redeem</button>
+                    </div>
+                    
+                    <div class="reward-card disabled">
+                        <div class="reward-image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"></path>
+                                <path d="M8.5 8.5v.01"></path>
+                                <path d="M16 15.5v.01"></path>
+                                <path d="M12 12v.01"></path>
+                                <path d="M11 17v.01"></path>
+                                <path d="M7 14v.01"></path>
+                            </svg>
+                        </div>
+                        <div class="reward-details">
+                            <h3>Plant a Tree</h3>
+                            <p>We'll plant a tree in your name in a reforestation area</p>
+                            <div class="reward-cost">1500 points</div>
+                        </div>
+                        <button class="redeem-reward-btn" data-cost="1500" disabled>Redeem</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Redemption Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content success-content">
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#4ECCA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h2>Reward Redeemed!</h2>
+            <p class="success-message">Your reward has been successfully redeemed. Check your email for details.</p>
+            <div class="coupon-code">
+                <p>Your coupon code:</p>
+                <div class="code">ECO-REWARD-12345</div>
+            </div>
+            <button class="close-success-btn">Close</button>
+        </div>
+    </div>
+
+    <script src="script2.js"></script>
+</body>
+</html>

@@ -1,21 +1,42 @@
 import { NavLink } from 'react-router-dom';
 import SignIn from './auth/SignIn';
 import './LandingPage.css';
+import React, { useEffect, useState } from 'react';
 
 
 const LandingPage = () => {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        try {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            setUser(JSON.parse(storedUser));
+          }
+        } catch (error) {
+          console.error('Error parsing user from localStorage:', error);
+          // Optionally, handle the error (e.g., set user to null, display an error message)
+        }
+      }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+        // Redirect to login or home page after logout
+        window.location.href = '/'; // Example redirect
+    };
 
 
     return (
 
         <>
-            
 
 
-           
 
 
-            
+
+
+
 
             <header>
                 <div class="navbar">
@@ -24,13 +45,41 @@ const LandingPage = () => {
                         <span>SmartWaste</span>
                     </div>
                     <div>
-                    <nav>
-                        <ul>
-                            <li><NavLink to="/user-dashboard"><a>User Dashboard</a></NavLink></li>
-                            <li><NavLink to="/admin-dashboard"><a>Admin Dashboard</a></NavLink></li>
-                            <li><NavLink to="/signin"><a>Login In</a></NavLink></li>
-                        </ul>
-                    </nav>
+                        <nav>
+                            <ul>
+                                {user ? (
+                                    <>
+                                        {user.role === 'admin' && (
+                                            <li>
+                                                <a href="/admin-dashboard">Admin Dashboard</a>
+                                            </li>
+                                        )}
+                                        {user.role === 'user' && (
+                                            <li>
+                                                <a href="/user-dashboard">User Dashboard</a>
+                                            </li>
+                                        )}
+                                        <li>
+                                            <a href="/" onClick={handleLogout}>Logout</a>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <li>
+                                        <a href="/signin">Login</a>
+                                    </li>
+                                )}
+
+
+
+
+
+
+
+                                {/*<li><NavLink to="/user-dashboard"><a>User Dashboard</a></NavLink></li>
+                                <li><NavLink to="/admin-dashboard"><a>Admin Dashboard</a></NavLink></li>
+                                <li><NavLink to="/signin"><a>Login In</a></NavLink></li>
+                            */}</ul>
+                        </nav>
                     </div>
                 </div>
             </header>
@@ -210,7 +259,7 @@ const LandingPage = () => {
                 </div>
                 <div class="waste-types">
                     <div class="waste-type">
-                        <img src="/api/placeholder/400/200" alt="Dry Waste" />
+                        <img src="/img1.webp" alt="Dry Waste" />
                         <div class="waste-type-content">
                             <h3>Dry Waste</h3>
                             <p>Dry waste includes materials that can be recycled and do not contain food residue or moisture.
@@ -228,7 +277,7 @@ const LandingPage = () => {
                         </div>
                     </div>
                     <div class="waste-type">
-                        <img src="/api/placeholder/400/200" alt="Wet Waste" />
+                        <img src="/img2.webp" alt="Wet Waste" />
                         <div class="waste-type-content">
                             <h3>Wet Waste</h3>
                             <p>Wet waste is biodegradable and typically contains food scraps or other organic materials that can
@@ -246,7 +295,7 @@ const LandingPage = () => {
                         </div>
                     </div>
                     <div class="waste-type">
-                        <img src="/api/placeholder/400/200" alt="Hazardous Waste" />
+                        <img src="/img3.webp" alt="Hazardous Waste" />
                         <div class="waste-type-content">
                             <h3>Hazardous Waste</h3>
                             <p>Hazardous waste contains harmful substances that require special handling and disposal
@@ -273,9 +322,7 @@ const LandingPage = () => {
                         <h2>Smart Notifications</h2>
                     </div>
                     <div class="notifications-content">
-                        <div class="notifications-image">
-                            <img src="/api/placeholder/600/400" alt="Notification System" />
-                        </div>
+
                         <div class="notifications-text">
                             <h3>Stay Informed in Real-Time</h3>
                             <div class="notification-feature">

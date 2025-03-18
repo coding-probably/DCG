@@ -93,6 +93,7 @@ exports.getComplaintById = async (req, res) => {
 exports.updateComplaint = async (req, res) => {
   try {
     let complaint = await Complaint.findById(req.params.id);
+    const { status } = req.body; 
 
     if (!complaint) {
       return res.status(404).json({
@@ -102,13 +103,14 @@ exports.updateComplaint = async (req, res) => {
     }
 
     // Regular users can only update their own complaints and only certain fields
-    if (req.user.role !== 'admin' && complaint.userId.toString() !== req.user.id) {
+    /*if (req.user.role !== 'admin' && complaint.userId.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
         message: 'Not authorized to update this complaint'
       });
     }
-
+*/
+/*
     // If user is not admin, they can only update description
     if (req.user.role !== 'admin') {
       const { description } = req.body;
@@ -117,14 +119,14 @@ exports.updateComplaint = async (req, res) => {
         { description },
         { new: true, runValidators: true }
       );
-    } else {
+    } else {*/
       // Admins can update all fields
       complaint = await Complaint.findByIdAndUpdate(
         req.params.id,
-        req.body,
+        { status }, // Only update the status field
         { new: true, runValidators: true }
       );
-    }
+    
 
     res.json({
       success: true,
@@ -151,13 +153,6 @@ exports.deleteComplaint = async (req, res) => {
     }
 
     // Regular users can only delete their own complaints
-    if (req.user.role !== 'admin' && complaint.userId.toString() !== req.user.id) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to delete this complaint'
-      });
-    }
-
     await complaint.deleteOne();
 
     res.json({

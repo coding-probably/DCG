@@ -2,96 +2,107 @@ import React, { useState } from "react";
 import "./Registration.css"; // Import your CSS Module
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie for managing cookies
+
 
 const Registration = () => {
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
+        name: '',
         email: '',
-        organization: '',
         password: '',
         confirmPassword: '',
         termsAccepted: false,
-      });
-    
-      const [errors, setErrors] = useState({});
-      const [passwordStrength, setPasswordStrength] = useState({ width: '0%', text: 'Password strength' });
-      const [loading, setLoading] = useState(false);
-      const [message, setMessage] = useState('');
-    
-      // Handle input changes for form fields
-      const handleChange = (e) => {
+    });
+
+    const [errors, setErrors] = useState({});
+    const [passwordStrength, setPasswordStrength] = useState({ width: '0%', text: 'Password strength' });
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
+
+    // Handle input changes for form fields
+    const handleChange = (e) => {
         const { id, value, type, checked } = e.target;
         setFormData((prevData) => ({
-          ...prevData,
-          [id]: type === 'checkbox' ? checked : value,
+            ...prevData,
+            [id]: type === 'checkbox' ? checked : value,
         }));
-    
+
         if (id === 'password') {
-          updateStrengthMeter(value);
+            updateStrengthMeter(value);
         }
-      };
-    
-      // Update password strength meter based on password value
-      const updateStrengthMeter = (password) => {
+    };
+
+    // Update password strength meter based on password value
+    const updateStrengthMeter = (password) => {
         let strength = 0;
         let status = '';
-    
+
         if (password.length >= 8) strength += 25;
         if (/[A-Z]/.test(password)) strength += 25;
         if (/[0-9]/.test(password)) strength += 25;
         if (/[^A-Za-z0-9]/.test(password)) strength += 25;
-    
+
         if (strength <= 25) {
-          status = 'Weak';
-          setPasswordStrength({ width: '25%', text: status, color: 'red' });
+            status = 'Weak';
+            setPasswordStrength({ width: '25%', text: status, color: 'red' });
         } else if (strength <= 50) {
-          status = 'Fair';
-          setPasswordStrength({ width: '50%', text: status, color: 'orange' });
+            status = 'Fair';
+            setPasswordStrength({ width: '50%', text: status, color: 'orange' });
         } else if (strength <= 75) {
-          status = 'Good';
-          setPasswordStrength({ width: '75%', text: status, color: 'blue' });
+            status = 'Good';
+            setPasswordStrength({ width: '75%', text: status, color: 'blue' });
         } else {
-          status = 'Strong';
-          setPasswordStrength({ width: '100%', text: status, color: 'green' });
+            status = 'Strong';
+            setPasswordStrength({ width: '100%', text: status, color: 'green' });
         }
-      };
-    
-      // Handle form submission with validation directly in the function
-      const handleSubmit = async (e) => {
+    };
+
+    // Handle form submission with validation directly in the function
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true); // Start loading state
         let newErrors = {};
-    
+
         // Validation checks
-        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+        if (!formData.name.trim()) newErrors.name = 'Name is required';
         if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Please enter a valid email';
         if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
         if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
         if (!formData.termsAccepted) newErrors.termsAccepted = 'You must agree to the terms';
-    
+
         // If errors are found, set error state and stop submission
         if (Object.keys(newErrors).length > 0) {
-          setErrors(newErrors);
-          setLoading(false);
-          return;
+            setErrors(newErrors);
+            setLoading(false);
+            return;
         }
-    
+
         try {
-          const response = await axios.post('http://localhost:5000/api/auth/register', formData, {
-            headers: { 'Content-Type': 'application/json' },
-          });
-    
-          setMessage(response.data.message);
-          alert('Registration successful! Redirecting...');
-          window.location.href = '/'; // Redirect to login page
+            const response = await axios.post('http://localhost:5000/api/auth/register', formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            // If registration is successful, store the token in a cookie and user data in localStorage
+            const { token, _id, name, email, role } = response.data;
+
+            // Store token as a cookie with an expiry of 1 day
+            Cookies.set('token', token, { expires: 2 });
+
+            // Store user info in localStorage as an object
+            localStorage.setItem('user', JSON.stringify({
+                userId: _id,
+                name: name,
+                email: email,
+                role: role
+            }));
+            setMessage(response.data.message);
+            alert('Registration successful! Redirecting...');
+            window.location.href = '/'; // Redirect to login page
         } catch (error) {
-          setErrors({ server: error.response?.data?.message || 'Registration failed' });
+            setErrors({ server: error.response?.data?.message || 'Registration failed' });
         } finally {
-          setLoading(false); // Stop loading state
+            setLoading(false); // Stop loading state
         }
-      };
+    };
 
     /*
     const [formData, setFormData] = useState({
@@ -200,9 +211,9 @@ const Registration = () => {
 
 
                         <div className="form-group">
-                            <label htmlFor="firstName">First Name</label>
-                            <input type="text" id="firstName" className="form-control" value={formData.firstName} onChange={handleChange} placeholder="Enter first name" />
-                            {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+                            <label htmlFor="name">Name</label>
+                            <input type="text" id="name" className="form-control" value={formData.name} onChange={handleChange} placeholder="Enter your name" />
+                            {errors.name && <div className="error-message">{errors.name}</div>}
                         </div>
 
 
@@ -245,8 +256,8 @@ const Registration = () => {
 
                 <div className="auth-footer">
                     <NavLink to="/signin">
-                    
-                    <p>Already have an account? <a href="login.html">Login</a></p>
+
+                        <p>Already have an account? <a href="login.html">Login</a></p>
                     </NavLink>
                 </div>
             </div>

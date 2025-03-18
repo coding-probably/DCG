@@ -74,6 +74,7 @@ const ClientDashboard = () => {
             </div>
 
             <div className="client-dash-user-panel">
+             <button className="client-dash-btn "><a href="/index2.html">Rewards</a></button>
                 <button onClick={handleComplaintBtnClick} className="client-dash-btn" id="complaint-btn">Report Issue</button>
                 <NavLink to="/"><button className="client-dash-btn client-dash-btn-primary">Home</button>
                 </NavLink>

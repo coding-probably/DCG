@@ -1,9 +1,56 @@
 import './ComplaintManagement.css'
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
+import { NavLink } from 'react-router-dom';
 
 //--------------------------------------------------------------------------------->
 const ComplaintModal = ({ complaint, onClose }) => {
+
+    const [complaintId, setComplaintId] = useState(complaint._id);
+  const [status, setStatus] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Handle complaint ID change
+  const handleComplaintIdChange = (e) => {
+    setComplaintId(e.target.value);
+  };
+
+  // Handle status change
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+  };
+
+  // Handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!complaintId || !status) {
+      setMessage('Please provide both complaint ID and status');
+      return;
+    }
+    setLoading(true);
+    try {
+      // Make API request to update complaint status
+      const response = await axios.put(
+        `http://localhost:5000/api/complaints/${complaintId}`, // Replace with your backend URL
+        { status } // Send status in the request body
+      );
+      setMessage('Complaint status updated successfully!');
+      console.log(response.data); // Log the response data
+      onClose();
+    } catch (error) {
+      console.error('Error updating complaint status:', error);
+      setMessage('Failed to update complaint status. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+
+
+
     return (<>
         <div className="complaint-modal-1">
         <div style={{width: "600px"}} className="complaint-modal" id="complaintModal">
@@ -54,21 +101,22 @@ const ComplaintModal = ({ complaint, onClose }) => {
                     <h4 style={{ margin: '25px 0 15px 0' }}>Update Status</h4>
                     <div className="form-group">
                         <label htmlFor="statusUpdate">New Status</label>
-                        <select className="form-control" id="statusUpdate">
-                            <option value="critical" selected>Critical</option>
+                        <select className="form-control" id="statusUpdate" value={status}
+            onChange={handleStatusChange}>
+                            <option value="cancelled">Cancelled</option>
                             <option value="pending">Pending</option>
                             <option value="in-progress">In Progress</option>
                             <option value="resolved">Resolved</option>
                         </select>
                     </div>
-                    <div className="form-group">
+                   {/* <div className="form-group">
                         <label htmlFor="updateNote">Note</label>
                         <textarea className="form-control" id="updateNote" placeholder="Add a note about this status update..."></textarea>
-                    </div>
+                    </div>*/}
                 </div>
                 <div className="modal-footer">
                     <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
-                    <button className="btn btn-primary">Update Status</button>
+                    <button className="btn btn-primary" onClick={handleSubmit}>Update Status</button>
                 </div>
             </div>
         </div>
@@ -374,32 +422,14 @@ const ComplaintManagement = () => {
     const [fetchedComplaints, setComplaints] = useState([
         {binId: "BIN-001",
             complaintId :  "COMP-2025-03-15-4996",
-
-           
             complaintType: "overflow",
-     
-            
             contactInfo: "testcomplaint@gmail.com",
-          
             createdAt: "2025-03-15T18:58:23.897Z",
-       
-            
             description: "this is to inform that this issue is not resolved after notifiying many times",
-      
-            
             location: "new delhi",
-    
-            
             priority:  "high",
-            
-           
             status: "Resolved",
-        
-            
             updatedAt :"2025-03-15T21:27:48.101Z",
-  
-            
-    
             _id : "67d5cdcf0a4ac51df907e1db"}
     ]);  // State to hold fetched complaints
   const [loading, setLoading] = useState(true);      // State for loading indicator
@@ -483,6 +513,45 @@ const ComplaintManagement = () => {
     
 
 
+    //--------------------------------------------------->
+
+
+    const handleDeleteComplaint = async (complaintId) => {
+        try {
+          // Send the delete request to the API
+          await axios.delete(`http://localhost:5000/api/complaints/${complaintId}`);
+          
+          // Update the state to remove the deleted complaint
+          setComplaints(complaints.filter(complaint => complaint.id !== complaintId));
+          alert('Complaint deleted successfully');
+        } catch (error) {
+          console.error('Error deleting complaint:', error);
+          alert('Failed to delete complaint');
+        }
+      };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //--------------------------------------->
+
     // Handle new complaint submission (you can manage this as needed, e.g., by saving it to a state or sending to a backend)
     const handleNewComplaintSubmit = async (e) => {
         e.preventDefault();
@@ -523,21 +592,23 @@ const ComplaintManagement = () => {
         <>
             <div className="container">
             <div className="sidebar">
-                    <div className="sidebar-logo">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#7928CA" />
-                                    <stop offset="100%" stopColor="#00D4FF" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M3 6h18"></path>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            <path d="M10 11v6"></path>
-                            <path d="M14 11v6"></path>
-                        </svg>
-                        <h2>SmartWaste</h2>
-                    </div>
+            <NavLink to='/'>
+                        <div className="sidebar-logo">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#7928CA" />
+                                        <stop offset="100%" stopColor="#00D4FF" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <path d="M10 11v6"></path>
+                                <path d="M14 11v6"></path>
+                            </svg>
+                            <h2>SmartWaste</h2>
+                        </div>
+                    </NavLink>
 
                     <ul className="sidebar-menu">
                         <li>
@@ -743,7 +814,7 @@ const ComplaintManagement = () => {
                                             <button className="action-btn" onClick={() => handleViewComplaint(complaint)}>
                                                 <i className="fas fa-eye" style={{color: "#4CD464"}}></i>
                                             </button>
-                                            <button className="action-btn">
+                                            <button className="action-btn" onClick={() => handleDeleteComplaint(complaint._id)}>
                                             <i class="fa-solid fa-trash-can" style={{color : "#FF3860"}}></i>
                                             </button>
                                         </td>

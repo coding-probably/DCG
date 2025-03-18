@@ -71,11 +71,7 @@ const AdminMap = () => {
                         </div>
                         <div className="user-profile">
                             
-                            <img src="/api/placeholder/40/40" alt="Admin User" />
-                            <div className="user-info">
-                                <h4>Admin User</h4>
-                                <p>System Administrator</p>
-                            </div>
+                            
                         </div>
                     </div>
 
